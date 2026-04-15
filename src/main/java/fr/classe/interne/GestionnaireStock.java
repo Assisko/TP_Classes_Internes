@@ -3,7 +3,7 @@ package fr.classe.interne;
 import java.util.*;
 
 public class GestionnaireStock {
-
+    // Liste qui contient tous les produits du stock
     private List<Produit> stock = new ArrayList<>();
 
     public void ajouterProduit(Produit p) {
@@ -13,28 +13,32 @@ public class GestionnaireStock {
 
 
 
-    //8 Méthode filtre
+    //8 Méthode de filtrage + tri
 
 
-    public List<Produit> filtrerEtTrier(String categorie, double prixMax, int quantiteMin) {
+    public List<Produit> filtrerEtTrier(String categorie, double prixMax, int quantiteMin) 
+    {
 
-        // Interface locale
+        // Interface locale (visible uniquement dans cette méthode)
         interface Filtre {
             boolean accepter(Produit p);
         }
 
         // Classe locale qui implémente Filtre
         class FiltreCompose implements Filtre {
+            // Méthode qui vérifie si un produit respecte les conditions
             public boolean accepter(Produit p) {
                 return p.getCategorie().equals(categorie)
                         && p.getPrix() <= prixMax
                         && p.getQuantite() >= quantiteMin;
             }
         }
-
+        // Creation du filtre 
         Filtre filtre = new FiltreCompose();
+        // liste des produits filtrés
         List<Produit> resultat = new ArrayList<>();
 
+        // Parcours du stock
         for (Produit p : stock) {
             if (filtre.accepter(p)) {
                 resultat.add(p);
@@ -42,8 +46,10 @@ public class GestionnaireStock {
         }
 
         // Tri par prix croissant
-        resultat.sort(new Comparator<Produit>() {
-            public int compare(Produit a, Produit b) {
+        resultat.sort(new Comparator<Produit>() 
+        {
+            public int compare(Produit a, Produit b)
+            {
                 return Double.compare(a.getPrix(), b.getPrix());
             }
         });
